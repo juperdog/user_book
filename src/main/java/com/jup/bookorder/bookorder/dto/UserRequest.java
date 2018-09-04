@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Getter
 @Setter
-public class UserCredential {
+public class UserRequest {
     @NotBlank(message="User should not be blank or null")
     private String username;
     @NotBlank(message="Password should not be blank or null")

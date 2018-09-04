@@ -1,22 +1,16 @@
 package com.jup.bookorder.bookorder.controllers;
 
-import javax.validation.Valid;
-
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jup.bookorder.controllers.AbstractDefaultController;
-import com.jup.bookorder.response.Response;
 import com.jup.bookorder.response.ResponseModel;
-import com.jup.bookorder.bookorder.entities.User;
 import com.jup.bookorder.bookorder.services.UsersService;
 
 @RestController
@@ -24,6 +18,11 @@ public class UsersController extends AbstractDefaultController{
 	
 	@Autowired
 	UsersService todoService;
+
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	public HttpEntity<ResponseModel> getUser(HttpServletRequest request) {
+		return new ResponseEntity(request.getAttribute("security_user"), HttpStatus.OK);
+	}
 
 	/*@RequestMapping(value = "/todos", method = RequestMethod.GET)
 	public HttpEntity<ResponseModel> getTodoList(

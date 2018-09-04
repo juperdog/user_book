@@ -1,6 +1,6 @@
 package com.jup.bookorder.bookorder.controllers;
 
-import com.jup.bookorder.bookorder.dto.UserCredential;
+import com.jup.bookorder.bookorder.dto.UserRequest;
 import com.jup.bookorder.bookorder.services.LoginService;
 import com.jup.bookorder.controllers.AbstractDefaultController;
 import com.jup.bookorder.response.ResponseModel;
@@ -25,7 +25,7 @@ public class LoginController extends AbstractDefaultController {
     private LoginService loginService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public HttpEntity<ResponseModel> getTodoList(@RequestBody @Valid UserCredential userCredential) {
+    public HttpEntity<ResponseModel> getTodoList(@RequestBody @Valid UserRequest userCredential) {
         return new ResponseEntity(loginService.login(userCredential), HttpStatus.OK);
     }
 }
