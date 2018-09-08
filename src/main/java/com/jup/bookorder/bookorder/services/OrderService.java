@@ -54,4 +54,9 @@ public class OrderService {
         }
         return sum;
     }
+
+    public List<Order> getOrderByUser(User user){
+        return ordersRepo.findByUserId(user.getId());
+
+    }
 }

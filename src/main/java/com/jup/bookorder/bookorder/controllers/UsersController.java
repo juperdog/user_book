@@ -3,6 +3,8 @@ package com.jup.bookorder.bookorder.controllers;
 import com.jup.bookorder.bookorder.dto.requests.OrderRequest;
 import com.jup.bookorder.bookorder.dto.requests.UserRequest;
 import com.jup.bookorder.bookorder.dto.responses.OrderResponse;
+import com.jup.bookorder.bookorder.dto.responses.UserResponse;
+import com.jup.bookorder.bookorder.entities.Order;
 import com.jup.bookorder.bookorder.entities.User;
 import com.jup.bookorder.bookorder.exception.BadRequestException;
 import com.jup.bookorder.bookorder.securities.UserCredential;
@@ -27,6 +29,7 @@ import com.jup.bookorder.bookorder.services.UsersService;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 public class UsersController extends AbstractDefaultController{
@@ -42,7 +45,8 @@ public class UsersController extends AbstractDefaultController{
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public HttpEntity<ResponseModel> getUser() {
-		return new ResponseEntity(userCredential.getUser(), HttpStatus.OK);
+		List<Order> orderList =  orderService.getOrderByUser(userCredential.getUser());
+		return new ResponseEntity(new UserResponse(userCredential.getUser(), orderList), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST)

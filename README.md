@@ -18,7 +18,7 @@ https://www.thomasvitale.com/https-spring-boot-ssl-certificate/
 
 
 Manual :
-1. Login
+1. Login to get $accessToken
 curl -i -kX POST https://localhost:8443/login \
   -d '{
  "username" : "user",
@@ -28,7 +28,7 @@ curl -i -kX POST https://localhost:8443/login \
 2. Get User
 curl -X GET \
   https://localhost:8443/users \
-  -H 'authorization: Bearer Xkmp4IyskSeQEQuC1L7lZKQ3YmXcCwSgP61ieke5xa0NkHm10ECw26fjrY8zaO10'
+  -H 'authorization: Bearer $accessToken'
 
 
 3. Get Books
@@ -37,8 +37,18 @@ curl -X GET https://localhost:8443/books
 4. Create new user
 curl -X POST \
   https://localhost:8443/users \
+  -H 'content-type: application/json' \
   -d '{
 	"username" : "user",
 	"password" : "password",
 	"date_of_birth" : "10/07/1987"
+}'
+
+5. Post order
+curl -X POST \
+  https://localhost:8443/users/orders \
+  -H 'authorization: Bearer $accessToken' \
+  -H 'content-type: application/json' \
+  -d '{
+	"orders" : [8]
 }'
