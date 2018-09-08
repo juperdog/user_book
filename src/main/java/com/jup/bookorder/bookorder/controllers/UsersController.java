@@ -8,6 +8,7 @@ import com.jup.bookorder.bookorder.entities.Order;
 import com.jup.bookorder.bookorder.entities.User;
 import com.jup.bookorder.bookorder.exception.BadRequestException;
 import com.jup.bookorder.bookorder.securities.UserCredential;
+import com.jup.bookorder.bookorder.services.LoginService;
 import com.jup.bookorder.bookorder.services.OrderService;
 import com.jup.bookorder.response.Response;
 import com.jup.bookorder.utils.Utils;
@@ -41,6 +42,9 @@ public class UsersController extends AbstractDefaultController{
 	OrderService orderService;
 
 	@Autowired
+	LoginService loginService;
+
+	@Autowired
 	private UserCredential userCredential;
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -66,6 +70,13 @@ public class UsersController extends AbstractDefaultController{
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/users", method = RequestMethod.DELETE)
+	public HttpEntity<ResponseModel> deleteUser() {
+		usersService.delete(userCredential.getUser());
+		loginService.revokeAccessToken(userCredential.getAccessToken());
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/users/orders", method = RequestMethod.POST)
 	public HttpEntity<ResponseModel> orderBook(@RequestBody OrderRequest orderRequest) {
 		BigDecimal price = orderService.order(userCredential.getUser(), orderRequest.getOrders());
@@ -76,37 +87,7 @@ public class UsersController extends AbstractDefaultController{
 		return new ResponseEntity(orderResponse, HttpStatus.OK);
 	}
 
-	/*@RequestMapping(value = "/todos", method = RequestMethod.GET)
-	public HttpEntity<ResponseModel> getTodoList(
-			@RequestParam(value = "number", required = false) Integer number,
-			@RequestParam(value = "size", required = false) Integer size) {
-		return new ResponseModel(Response.SUCCESS, todoService.getTodoPage(number, size)).build(HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/todos/{id}", method = RequestMethod.GET)
-	public HttpEntity<ResponseModel> getTodo(@PathVariable("id") long id) {
-		return new ResponseModel(Response.SUCCESS, todoService.getTodoById(id)).build(HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/todos", method = RequestMethod.POST)
-	public HttpEntity<ResponseModel> saveTodo(@RequestBody @Valid User todo, BindingResult validResult) {
-		return new ResponseModel(Response.SUCCESS, todoService.saveTodo(todo)).build(HttpStatus.OK);
-	}
 
-	@RequestMapping(value = "/todos/{id}", method = RequestMethod.PUT)
-	public HttpEntity<ResponseModel> updateTodo(@RequestBody @Valid User todo, @PathVariable("id") long id, BindingResult validResult) {
-		todo.setId(id);
-		return new ResponseModel(Response.SUCCESS, todoService.updateTodo(todo)).build(HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/todos/{id}", method = RequestMethod.DELETE)
-	public HttpEntity<ResponseModel> delTodo(@PathVariable("id") long id) {
-		todoService.deleteTodo(id);
-		return new ResponseModel(Response.SUCCESS, "").build(HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/todos/{id}/status/{status}", method = RequestMethod.PUT)
-	public HttpEntity<ResponseModel> updateTodo(@PathVariable("id") long id, @PathVariable("status") String status) {
-		return new ResponseModel(Response.SUCCESS, todoService.updateStatus(id, status)).build(HttpStatus.OK);
-	}*/
+
+
 }

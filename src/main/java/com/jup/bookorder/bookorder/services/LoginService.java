@@ -39,7 +39,7 @@ public class LoginService {
         String hashedPassword = usersService.hashPassword(userRequest.getPassword());
         if(user != null && user.getPassword().equals(hashedPassword)){
             String accessToken = RandomStringUtils.randomAlphanumeric(64);
-            UserCredential userCredential = new UserCredential(user.getUsername(), user.getPassword(), user, System.currentTimeMillis()+timeout);
+            UserCredential userCredential = new UserCredential(user.getUsername(), user.getPassword(), user, System.currentTimeMillis()+timeout, accessToken);
             accessTokenMapping.put(accessToken, userCredential);
             return accessToken;
         }
@@ -83,5 +83,9 @@ public class LoginService {
 
     protected boolean isExpired(UserCredential userCredential){
         return userCredential.getExpire() < System.currentTimeMillis();
+    }
+
+    public void revokeAccessToken(String accessToken){
+        accessTokenMapping.remove(accessToken);
     }
 }

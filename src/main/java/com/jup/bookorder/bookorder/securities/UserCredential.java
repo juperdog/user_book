@@ -20,13 +20,15 @@ public class UserCredential {
     private String password;
     private long expire;
     private User user;
+    private String accessToken;
 
     public UserCredential(){}
 
-    public UserCredential(String username, String password, User user, long expire){
+    public UserCredential(String username, String password, User user, long expire, String accessToken){
         this.username = username;
         this.password = password;
         this.user = user;
         this.expire = expire;
+        this.accessToken = accessToken;
     }
 }

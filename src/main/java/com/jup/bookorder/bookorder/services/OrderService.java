@@ -57,6 +57,10 @@ public class OrderService {
 
     public List<Order> getOrderByUser(User user){
         return ordersRepo.findByUserId(user.getId());
+    }
 
+    public void deleteOrderByUser(User user){
+        List<Order> orderList = ordersRepo.findByUserId(user.getId());
+        ordersRepo.delete(orderList);
     }
 }

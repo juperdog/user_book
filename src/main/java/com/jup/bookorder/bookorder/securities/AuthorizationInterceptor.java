@@ -69,6 +69,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             userCredential.setUsername(userCredentialByAccessToken.getUsername());
             userCredential.setPassword(userCredentialByAccessToken.getPassword());
             userCredential.setExpire(userCredentialByAccessToken.getExpire());
+            userCredential.setAccessToken(userCredentialByAccessToken.getAccessToken());
             userCredential.setUser(userCredentialByAccessToken.getUser());
         }
         return true;
