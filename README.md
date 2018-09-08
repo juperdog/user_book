@@ -6,8 +6,6 @@ Setup env :
 - Generate KeyStore :
     keytool -genkeypair -alias tomcat -keyalg RSA -keysize 2048 -keystore keystore.jks -validity 3650
 
-
-
 Run Application :
 mvn clean spring-boot:run
 
@@ -52,3 +50,8 @@ curl -X POST \
   -d '{
 	"orders" : [8]
 }'
+
+6. Delete User
+curl -X DELETE \
+  https://localhost:8443/users \
+  -H 'authorization: Bearer $accessToken' \

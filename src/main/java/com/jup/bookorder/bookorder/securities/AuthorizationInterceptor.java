@@ -9,8 +9,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wasan_kha on 9/4/2018 AD.
@@ -26,21 +25,16 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private UserCredential userCredential;
 
-    Map<String, String> ignorePath = new HashMap<String, String>()
-    {{
-        put("/login", "POST");
-        put("/users", "POST");
-        put("/books", "GET");
-    }};
-
-
+    Set<String> interestingPath = new HashSet<>(Arrays.asList(
+        "GET/users",
+        "DELETE/users",
+        "POST/users/orders"
+    ));
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //ignore security
-        String ignoreMethodFromUri = ignorePath.get(request.getRequestURI());
-        if(ignoreMethodFromUri != null && ignoreMethodFromUri.equals(request.getMethod())){
+        if(!interestingPath.contains(request.getMethod()+request.getRequestURI())){
             return true;
         }
 
