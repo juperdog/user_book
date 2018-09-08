@@ -8,14 +8,37 @@ Setup env :
 
 
 
-
-Run :
-mvn spring-boot:run
-
-https://localhost:8443/users
-
+Run Application :
+mvn clean spring-boot:run
 
 Note:
 Enable Https :
 https://drissamri.be/blog/java/enable-https-in-spring-boot/
 https://www.thomasvitale.com/https-spring-boot-ssl-certificate/
+
+
+Manual :
+1. Login
+curl -i -kX POST https://localhost:8443/login \
+  -d '{
+ "username" : "user",
+ "password" : "password"
+}'
+
+2. Get User
+curl -X GET \
+  https://localhost:8443/users \
+  -H 'authorization: Bearer Xkmp4IyskSeQEQuC1L7lZKQ3YmXcCwSgP61ieke5xa0NkHm10ECw26fjrY8zaO10'
+
+
+3. Get Books
+curl -X GET https://localhost:8443/books
+
+4. Create new user
+curl -X POST \
+  https://localhost:8443/users \
+  -d '{
+	"username" : "user",
+	"password" : "password",
+	"date_of_birth" : "10/07/1987"
+}'

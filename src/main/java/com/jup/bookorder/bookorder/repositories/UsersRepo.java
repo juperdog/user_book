@@ -8,8 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.jup.bookorder.bookorder.entities.User;
 
-public interface UsersRepo extends CrudRepository<User, String> {
-	List<User> findAll();
-	Page<User> findAll(Pageable pageable);
+public interface UsersRepo extends CrudRepository<User, Long> {
 	User findByUsername(String username);
 }

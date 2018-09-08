@@ -2,7 +2,7 @@ package com.jup.bookorder.configs;
 
 import java.util.List;
 
-import com.jup.bookorder.bookorder.security.AuthorizationInterceptor;
+import com.jup.bookorder.bookorder.securities.AuthorizationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;

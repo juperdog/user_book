@@ -1,6 +1,7 @@
-package com.jup.bookorder.bookorder.security;
+package com.jup.bookorder.bookorder.securities;
 
 import com.jup.bookorder.bookorder.services.LoginService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private UserCredential userCredential;
 
     Map<String, String> ignorePath = new HashMap<String, String>()
     {{
@@ -58,8 +62,15 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
-        request.setAttribute("security_accessToken", accessToken);
-        request.setAttribute("security_user", loginService.getUserByAccessToken(accessToken));
+        //copy value to request scope bean
+        UserCredential userCredentialByAccessToken = loginService.getUserCredentialByAccessToken(accessToken);
+
+        if(userCredentialByAccessToken != null ){
+            userCredential.setUsername(userCredentialByAccessToken.getUsername());
+            userCredential.setPassword(userCredentialByAccessToken.getPassword());
+            userCredential.setExpire(userCredentialByAccessToken.getExpire());
+            userCredential.setUser(userCredentialByAccessToken.getUser());
+        }
         return true;
     }
 

@@ -19,13 +19,12 @@ import java.util.Date;
 @Table(name = "User")
 public class User {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false, columnDefinition = "BIGINT UNSIGNED")
+	private Long id;
+
     @Column(name = "username", nullable = false)
     private String username;
-	
-//	@Column(name = "title", nullable = false)
-//	@NotBlank(message="Title should not be blank or null")
-//	@NotFound
-//	private String title;
 	
 	@Column(name = "password", nullable = false)
 	private String password;

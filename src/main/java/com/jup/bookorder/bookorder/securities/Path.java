@@ -1,4 +1,4 @@
-package com.jup.bookorder.bookorder.security;
+package com.jup.bookorder.bookorder.securities;
 
 import lombok.Data;
 
