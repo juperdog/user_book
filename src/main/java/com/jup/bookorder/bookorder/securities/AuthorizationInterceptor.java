@@ -17,7 +17,8 @@ import java.util.*;
 @Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
-    private final String authorizationHeaderName = "Authorization";
+    private final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private final String AUTHORIZATION_NAME = "Bearer";
 
     @Autowired
     private LoginService loginService;
@@ -34,22 +35,26 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        //this interceptor will intercept when it has been declared in interestingPath
         if(!interestingPath.contains(request.getMethod()+request.getRequestURI())){
             return true;
         }
 
-        String authorization = request.getHeader(authorizationHeaderName);
+        //Check "Authorization" in request header
+        String authorization = request.getHeader(AUTHORIZATION_HEADER_NAME);
         if (authorization == null) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return false;
         }
 
+        //Seperate Authorization header and it has to start with "Bearer"
         String[] authorizations = authorization.split(" ", 2);
-        if (!"Bearer".equalsIgnoreCase(authorizations[0]) || authorizations.length != 2) {
+        if (!AUTHORIZATION_NAME.equalsIgnoreCase(authorizations[0]) || authorizations.length != 2) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return false;
         }
 
+        //Check accessToken
         String accessToken = authorizations[1];
         if(!loginService.isValidToken(accessToken)){
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -58,7 +63,6 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
         //copy value to request scope bean
         UserCredential userCredentialByAccessToken = loginService.getUserCredentialByAccessToken(accessToken);
-
         if(userCredentialByAccessToken != null ){
             userCredential.setUsername(userCredentialByAccessToken.getUsername());
             userCredential.setPassword(userCredentialByAccessToken.getPassword());

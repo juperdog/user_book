@@ -33,6 +33,7 @@ public class BookService {
             recommendedBookIdList.add(recommendedBook.getId());
         }
 
+        //use sortSet to sort the data
         SortedSet<BookWithRecommendation> out = new TreeSet<>();
         for(Book book : bookList){
             out.add(new BookWithRecommendation(book, recommendedBookIdList.contains(book.getId())));

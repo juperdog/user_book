@@ -34,12 +34,18 @@ public class LoginService {
     private List<String> needToBeRemove = new ArrayList<>();
 
     public String login(UserLoginRequest userRequest){
+        //find user by username in db
         User user = usersRepo.findByUsername(userRequest.getUsername());
 
+        //hash password that has been send in the request and verify
         String hashedPassword = usersService.hashPassword(userRequest.getPassword());
         if(user != null && user.getPassword().equals(hashedPassword)){
+
+            //generate accessToken
             String accessToken = RandomStringUtils.randomAlphanumeric(64);
             UserCredential userCredential = new UserCredential(user.getUsername(), user.getPassword(), user, System.currentTimeMillis()+timeout, accessToken);
+
+            //map accessToken and user
             accessTokenMapping.put(accessToken, userCredential);
             return accessToken;
         }
@@ -48,19 +54,24 @@ public class LoginService {
     }
 
     public boolean isValidToken(String accessToken){
-        return accessTokenMapping.get(accessToken) != null;
-    }
+        //Get UserCredential by accessToken
+        UserCredential userCredential = accessTokenMapping.get(accessToken);
 
-    public UserCredential getUserCredentialByAccessToken(String accesToken) {
+        //If there is no accessToken, return false
+        if(userCredential == null)
+            return false;
 
-        UserCredential userCredential = accessTokenMapping.get(accesToken);
-        if(userCredential != null) {
-            if(!isExpired(userCredential)){
-                return userCredential;
-            }
+        //If accessToken is expired then revoke accessToken and return false;
+        if(isExpired(userCredential)){
+            revokeAccessToken(accessToken);
+            return false;
         }
 
-        return null;
+        return true;
+    }
+
+    public UserCredential getUserCredentialByAccessToken(String accessToken) {
+        return accessTokenMapping.get(accessToken);
     }
 
 

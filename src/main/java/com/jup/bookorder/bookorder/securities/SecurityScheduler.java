@@ -16,6 +16,7 @@ public class SecurityScheduler {
     @Autowired
     private LoginService loginService;
 
+    //cleanup expire accessToken every 5mins
     @Scheduled(fixedDelay = 300000)
     public void cleanupAccessToken() {
         System.out.println("cleanupAccessToken");

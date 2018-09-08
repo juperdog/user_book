@@ -40,9 +40,9 @@ public class CachableBookService {
     @Autowired
     private CacheManager cm;
 
+    //this method will be cache until midnight of sunday (invalidate cache will be done by invaliateAllBooksCache)
     @Cacheable("allBooks")
     public List<Book> getAllBooks(){
-        System.out.println("--- getAllBooks ---");
         try {
             ResponseEntity<List<Book>> responses = restTemplate.exchange(bookServiceUrl, HttpMethod.GET, null, listBook);
             return responses.getBody();
@@ -61,6 +61,7 @@ public class CachableBookService {
         }
     }
 
+    //this method will be cache until midnight of sunday (invalidate cache will be done by invaliateAllBooksCache)
     @Cacheable("allBooksMap")
     public Map<Long, Book> getAllBooksInMap(){
         List<Book> bookList = getAllBooks();
